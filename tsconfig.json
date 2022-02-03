@@ -1,0 +1,33 @@
+{
+  "compileOnSave": false,
+  "include": [    
+    "src/App/**/**.js",
+    "src/App/**/**.ts",
+    "src/App/**/**.vue"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "jsx": "preserve",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "newLine": "crlf",
+    "declaration": true,
+    "removeComments": true,
+    "isolatedModules": true,
+    "emitDeclarationOnly": true,
+    "allowUnreachableCode": false,
+    "allowSyntheticDefaultImports": true,
+
+    "typeRoots": [
+      "declarations.d.ts"
+    ],
+
+    "baseUrl": ".",
+    "paths": {
+      "App/*": [ "src/App/*" ],
+    }
+  }
+}

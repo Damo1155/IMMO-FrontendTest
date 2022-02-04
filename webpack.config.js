@@ -25,23 +25,23 @@ module.exports = {
     },
     module: {
         rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: [{
-                    loader: "babel-loader",
-                    options: {
-                        presets: ["@babel/preset-env"],
-                        plugins: [
-                            "@babel/plugin-transform-runtime",
-                            ["import", {
-                                "libraryName": "antd",
-                                "style": true,   // or "css"
-                            }, "antd"]
-                        ]
-                    }
-                }],
-            },
+            // {
+            //     test: /\.js$/,
+            //     exclude: /node_modules/,
+            //     use: [{
+            //         loader: "babel-loader",
+            //         options: {
+            //             presets: ["@babel/preset-env"],
+            //             plugins: [
+            //                 "@babel/plugin-transform-runtime",
+            //                 ["import", {
+            //                     "libraryName": "antd",
+            //                     "style": true,   // or "css"
+            //                 }, "antd"]
+            //             ]
+            //         }
+            //     }],
+            // },
             {
                 test: /\.ts$/,
                 exclude: /node_modules/,
@@ -71,7 +71,11 @@ module.exports = {
         new VueLoaderPlugin()
     ],
     resolve: {
-        extensions: [".js", ".ts"]
+        extensions: [".js", ".ts"],
+        alias: {
+            "Enums": path.resolve(__dirname, "./src/Enums/"),
+            "Models": path.resolve(__dirname, "./src/Models/")
+        }
     },
     optimization: {
         minimize: true,

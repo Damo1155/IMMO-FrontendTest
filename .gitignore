@@ -4,3 +4,4 @@ node_modules/
 
 # Compiled Frontend Ignores
 src/**/*.js
+!src/api.js

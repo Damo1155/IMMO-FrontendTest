@@ -2,7 +2,6 @@
   "compileOnSave": false,
   "include": [
     "src/**.ts",
-    "src/**/**.js",
     "src/**/**.vue"
   ],
   "exclude": [
@@ -15,28 +14,6 @@
       "ES7",
       "DOM",
       "ES2021"
-    ]
-
-
-    // "jsx": "preserve",
-    // "target": "ESNext",
-    // "module": "ESNext",
-    // "moduleResolution": "Node",
-    // "newLine": "crlf",
-    // //"declaration": true,
-    // "removeComments": true,
-    // //"isolatedModules": true,
-    // //"emitDeclarationOnly": true,
-    // "allowUnreachableCode": false,
-    // "allowSyntheticDefaultImports": true,
-
-    // "typeRoots": [
-    //   "src/shim-vue.d.ts"
-    // ],
-
-    // "baseUrl": ".",
-    // "paths": {
-    //   "Application/*": [ "src/Application/*" ],
-    // }
+    ],
   }
 }

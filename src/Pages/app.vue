@@ -1,11 +1,23 @@
 ﻿<template>
-    Vue Test
+    <SiteHeader></SiteHeader>
+
+    <div class="container-fluid">
+        <PropertySearchTool></PropertySearchTool>
+    </div>
 </template>
 
 <script lang="ts">
     import { defineComponent } from "vue";
 
+    // Modules
+    import SiteHeader from "./SiteStructure/SiteHeader.vue";
+    import PropertySearchTool from "./PropertySearchTool.vue";
+
     export default defineComponent({
-        name: "App"
+        name: "App",
+        components: {
+            SiteHeader,
+            PropertySearchTool
+        }
     });
 </script>

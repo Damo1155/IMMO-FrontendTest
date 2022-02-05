@@ -11,7 +11,7 @@
 
     // Modules
     import SiteHeader from "./SiteStructure/SiteHeader.vue";
-    import PropertySearchTool from "./PropertySearchTool.vue";
+    import PropertySearchTool from "./PropertySearch/PropertySearchTool.vue";
 
     export default defineComponent({
         name: "App",

@@ -26,26 +26,25 @@ module.exports = {
     module: {
         rules: [
             {
-              test: /\.svg$/,
-              use: [
-                {
-                  loader: "svg-url-loader",
-                  options: {
-                    limit: 10000,
-                  },
-                },
-              ],
+                test: /\.(svg|png|jpg|jpeg|gif)$/,
+                use: {
+                    loader: "file-loader",
+                    options: {
+                    name: "[name].[hash].[ext]",
+                    outputPath: "imgs"
+                    }
+                }
             },
             {
-              test: /\.s[ac]ss$/i,
-              use: [
-                // Creates `style` nodes from JS strings
-                "style-loader",
-                // Translates CSS into CommonJS
-                "css-loader",
-                // Compiles Sass to CSS
-                "sass-loader",
-              ],
+                test: /\.s[ac]ss$/i,
+                use: [
+                    // Creates `style` nodes from JS strings
+                    "style-loader",
+                    // Translates CSS into CommonJS
+                    "css-loader",
+                    // Compiles Sass to CSS
+                    "sass-loader",
+                ],
             },
             {
                 test: /\.ts$/,

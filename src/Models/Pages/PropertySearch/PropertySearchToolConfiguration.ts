@@ -1,6 +1,6 @@
 // Models
 import { PropertyType } from "../../../api";
-import { MappedProperties } from "../../../Models/Pages/PropertySearch/PropertiesConfiguration";
+import { MappedProperty } from "../../../Models/Pages/PropertySearch/PropertiesConfiguration";
 
 export interface PropertySearchToolData {
     DisplayHelpMessage: boolean;
@@ -9,8 +9,8 @@ export interface PropertySearchToolData {
     Identifiers: Identifiers;
     CustomMessages: CustomMessages;
 
+    Properties: Array<MappedProperty>;
     PropertyTypes: Array<PropertyType>;
-    Properties: Array<MappedProperties>;
 }
 
 interface Identifiers {

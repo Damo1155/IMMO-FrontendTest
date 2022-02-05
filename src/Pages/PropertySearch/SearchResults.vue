@@ -24,13 +24,16 @@
             <tbody>
                 <tr v-for="property in Properties" :key="property.Id">
                     <td class="text-center">
+                        <!-- TODO   :   On click, check the selected state
+                                        If 'selected/true' then deselect it and remove from the list of selected properties
+                                        If 'unselected/false' then select it and add to the list of selected properties -->
                         <input type="checkbox" class="width-auto" :aria-label="CustomMessages.SelectProperty">
                     </td>
                     <td class="text-center">{{property.Address}}</td>
                     <td class="text-center">{{property.Postcode}}</td>
                     <td class="text-center immo-sentence-case">{{property.PropertyType}}</td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
+                    <td class="text-center">{{property.NumberOfRooms}}</td>
+                    <td class="text-center">{{property.FloorArea}}</td>
                 </tr>
             </tbody>
         </table>        
@@ -44,7 +47,7 @@
     import { defineComponent, PropType } from "vue";
 
     // Models
-    import { MappedProperties } from "../../Models/Pages/PropertySearch/PropertiesConfiguration";
+    import { MappedProperty } from "../../Models/Pages/PropertySearch/PropertiesConfiguration";
 
     // Components
     import AlertInfo from "../../Components/Alerts/AlertInfo.vue";
@@ -76,7 +79,7 @@
         props: {
             Properties: {
                 required: true,
-                type: Array as PropType<Array<MappedProperties>>
+                type: Array as PropType<Array<MappedProperty>>
             },
             DisplayHelpMessage: {
                 type: Boolean,

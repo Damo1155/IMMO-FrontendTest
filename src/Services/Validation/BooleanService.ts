@@ -4,7 +4,7 @@
 import { AnyObject } from "yup/lib/object";
 
 // Models
-import { BaseValidatorProperties } from "Models/Shared/Validation/ValidatorConfiguration";
+import { BaseValidatorProperties } from "../../Models/Validation/ValidatorConfiguration";
 
 export const BuildBooleanValidator = (request: BaseValidatorProperties): BooleanSchema<boolean, AnyObject> => {
     return boolean()

@@ -1,6 +1,13 @@
 // External Libraries
-@import "../../node_modules/bootstrap/scss/bootstrap";
-@import "../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss";
+
+// General
+@import "./General/html.scss";
+@import "./General/text.scss";
+
+// Custom
+@import "./Custom/Bootstrap/alerts.scss";
 
 // Site Styling
-@import "./site-structure";
+@import "./Custom/Structure/site-structure.scss";

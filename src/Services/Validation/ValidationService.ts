@@ -1,8 +1,8 @@
 ﻿// State Management
-import { store } from "StoreManagement/SimpleDefaultStore";
+import { store } from "../../StoreManagement/SimpleDefaultStore";
 
 // Models
-import { InputState } from "Models/Shared/Controls/Inputs/InputControlState";
+import { InputState } from "../../Models/Inputs/InputControlState";
 
 export const IsValid = (identifiers: Array<string>): boolean => {
     let allValid = true;

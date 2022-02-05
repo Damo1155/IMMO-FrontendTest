@@ -3,6 +3,7 @@ import "./SCSS/site-layout.SCSS";
 
 // Libraries
 import { createApp } from "vue";
+import "@fortawesome/fontawesome-free/js/all";
 
 // VueX Store
 import { UseStore } from "./StoreManagement/SimpleDefaultStore";

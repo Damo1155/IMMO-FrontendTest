@@ -4,7 +4,7 @@
 import { AnyObject } from "yup/lib/object";
 
 // Models
-import { StringValidatorProperties } from "Models/Shared/Validation/ValidatorConfiguration";
+import { StringValidatorProperties } from "../../Models/Validation/ValidatorConfiguration";
 
 export const BuildStringValidator = (request: StringValidatorProperties): StringSchema<string, AnyObject> => {
     return string()

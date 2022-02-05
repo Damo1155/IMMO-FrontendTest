@@ -1,11 +1,16 @@
-﻿<template>
-    <div class="form-group mb-1">
-        <label :for="FieldIdentifier" :class="{ 'atr-required': IsRequired }">{{Text}}</label>
+﻿<template>      
+    <template v-if="AsPlaceholder">
         <input type="text" class="form-control"
-               v-model="Value" :id="FieldIdentifier" :aria-required="IsRequired" :readonly="IsReadonly" :maxlength="MaxLength" />
-    </div>
-
-    <AlertValidation :Text="ErrorMessage"></AlertValidation>
+               v-model="Value" :id="FieldIdentifier" :aria-required="IsRequired" :readonly="IsReadonly" :maxlength="MaxLength"
+               :placeholder="Text" :aria-label="Text" />
+    </template>
+    <template v-else>  
+        <div class="form-group mb-1">      
+            <label :for="FieldIdentifier" :class="{ 'immo-required': IsRequired }">{{Text}}</label>
+            <input type="text" class="form-control"
+                   v-model="Value" :id="FieldIdentifier" :aria-required="IsRequired" :readonly="IsReadonly" :maxlength="MaxLength" />
+        </div>
+    </template>
 </template>
 
 <script lang="ts">
@@ -20,9 +25,6 @@
     // Services
     import { BuildStringValidator } from "../../Services/Validation/StringService";
     import { RetrieveValue, StoreValue } from "../../StoreManagement/StoreManagementService";
-
-    // Components
-    import AlertValidation from "../Alerts/AlertValidation.vue";
 
     export default defineComponent({
         name: "InputText",
@@ -113,10 +115,11 @@
             },
             MaxLength: {
                 type: Number
+            },
+            AsPlaceholder: {
+                type: Boolean,
+                default: false
             }
-        },
-        components: {
-            AlertValidation
         }
     });
 </script>

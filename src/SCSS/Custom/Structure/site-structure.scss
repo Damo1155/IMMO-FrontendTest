@@ -1,4 +1,4 @@
-@import "./Variables/colours";
+@import "../../Variables/colours.scss";
 
 .immo-nav-header {
     height: 7rem;
@@ -9,7 +9,7 @@
         background: linear-gradient(0, $immo-white 25%, $immo-navigation-header 25%);
 
         .immo-brand-logo {
-            padding: 0.625rem 0 0 0.625rem;
+            padding: 0.625rem;
 
             img {
                 height: 5.625rem;

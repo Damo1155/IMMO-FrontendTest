@@ -27,13 +27,14 @@
         </div>
         <div class="col-md-10">
             <SelectedSearchResults :SelectedProperties="SelectedProperties" :IsProcessingSearch="IsProcessingSearch"></SelectedSearchResults>
-            <SearchResults :Properties="Properties" :DisplayHelpMessage="DisplayHelpMessage" :IsProcessingSearch="IsProcessingSearch"></SearchResults>
+            <SearchResults :Properties="Properties" :DisplayHelpMessage="DisplayHelpMessage" :IsProcessingSearch="IsProcessingSearch"
+                           @UpdatePropertySelection="UpdatePropertySelection"></SearchResults>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { defineComponent, toRaw } from "vue";
+    import { defineComponent } from "vue";
 
     // Api
     import { fetchProperties, fetchPropertyDetails, getAvailablePropertyTypes, PropertyDetails, PropertyType } from "../../api";
@@ -43,7 +44,6 @@
     import { MappedPropertyBase, MappedProperty } from "../../Models/Pages/PropertySearch/PropertiesConfiguration";
 
     // Services
-    import { DistinctBy } from "../../Services/Array/DuplicatesService";
     import { IsValid } from "../../Services/Validation/ValidationService";
     import { RetrieveValue } from "../../StoreManagement/StoreManagementService";
 
@@ -75,6 +75,30 @@
             } as PropertySearchToolData;
         },
         methods:{
+            UpdatePropertySelection(id: string): void {
+                const properties = this.Properties as Array<MappedProperty>;
+                const property = properties.find((property: MappedProperty) => property.Id == id);
+
+                if(property.IsSelected) {
+                    // Important    :   Cannot rely on 'index' with 'splice'/'$delete' due to dealing with 2 different objects.
+                    const selectedProperties = (this.SelectedProperties as Array<MappedPropertyBase>);
+                    const filteredProperties = selectedProperties.filter((selectedProperty: MappedPropertyBase) => selectedProperty.Id !== id);
+                    
+                    this.SelectedProperties = filteredProperties;
+                    
+                    return;
+                }
+
+                const newSelectedProperty = {
+                    Id: property.Id,
+                    Address: property.Address,
+                    Postcode: property.Postcode,
+                    FloorArea: property.FloorArea,
+                    NumberOfRooms: property.NumberOfRooms
+                } as MappedPropertyBase;
+
+                (this.SelectedProperties as Array<MappedPropertyBase>).push(newSelectedProperty);
+            },
             ProcessSearch(type: string): void {
                 if(this.IsProcessingSearch) {
                     return;
@@ -103,6 +127,7 @@
                         this.RetrievePropertyDetails(ids);
                     })
                     .catch(() => {
+                        console.error("'ProcessSearch' ERROR OCCURED");
                         // TODO :   Display an error message as it's sending back randomly generated errors.
                     })
                     .finally(() => {
@@ -120,13 +145,18 @@
                     promises.push(fetchPropertyDetails(id));
                 });
 
+                const selectedProperties = (this.SelectedProperties as Array<MappedPropertyBase>)
+
                 Promise.all(promises)
                     .then((response) => {
                         const mappedProperties = 
                             response.map(({ property }) => {
+                                const isSelected = selectedProperties
+                                    .some((selectedProperty: MappedPropertyBase) => selectedProperty.Id === property.id);
+
                                 return {
                                     Id: property.id,
-                                    IsSelected: false, // TODO  :   Compare against the 'SelectedProperties' array to see if it's selected
+                                    IsSelected: isSelected,
                                     Address: property.address,
                                     Postcode: property.postcode,
                                     FloorArea: property.floorArea,
@@ -138,6 +168,7 @@
                         this.Properties = mappedProperties;
                     })
                     .catch(() => {
+                        console.error("'RetrievePropertyDetails' ERROR OCCURED");
                         // TODO :   Display an error message as it's sending back randomly generated errors.
                     })
             },
@@ -151,44 +182,6 @@
 
                         this.PropertyTypes = propertyTypes;
                     });
-            }
-        },
-        computed: {
-            ArePropertiesSelected(): boolean {
-                return this.Properties.map((property: MappedProperty) => property.IsSelected);
-            }
-        },
-        watch:{
-            ArePropertiesSelected(): void {
-                // TODO :   Deselecting the 'Selected Properties' doesn't remove them from the list.
-                //          Might need to be done differently, look into emitting a callback.
-                //              This way the ID of the selected object can be sent back rather than relying on reactive objects.
-
-                const properties = this.Properties as Array<MappedProperty>;
-
-                // Important    :   Reactive property which needs to be unwrapped when assigning to 'updatedSelection',
-                //                  otherwise it'll be assigned as a proxy.
-                const selectedProperties = toRaw(this.SelectedProperties) as Array<MappedPropertyBase>;
-                
-                const newAdditions = properties
-                    .filter((property: MappedProperty) => property.IsSelected)
-                    .map((property: MappedProperty) => {
-                        return {
-                            Id: property.Id,
-                            Address: property.Address,
-                            Postcode: property.Postcode,
-                            FloorArea: property.FloorArea,
-                            NumberOfRooms: property.NumberOfRooms
-                        } as MappedPropertyBase;
-                    });
-
-                const updatedSelection = [] as Array<MappedPropertyBase>;
-                
-                updatedSelection.push(...selectedProperties);
-                updatedSelection.push(...newAdditions);
-
-                // Purpose  :   Due to the above it's possible duplicates could be added so those are removed.
-                this.SelectedProperties = DistinctBy("Id", updatedSelection);
             }
         },
         mounted(): void {

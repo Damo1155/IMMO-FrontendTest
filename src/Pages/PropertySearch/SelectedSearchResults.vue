@@ -36,7 +36,7 @@
                 CustomMessages: {
                     Address: "Address",
                     Postcode: "Postcode",
-                    FloorArea: "Floor area",
+                    FloorArea: "Floor area (m2)", // TODO   :   m2 needs to look like the designs
                     NumberOfRooms: "Number of rooms",
                     SelectedProperties: "Selected properties",
                     ListOfSelectedProperties: "List of selected properties"

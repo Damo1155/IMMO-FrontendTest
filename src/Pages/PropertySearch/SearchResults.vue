@@ -24,12 +24,8 @@
             <tbody>
                 <tr v-for="property in Properties" :key="property.Id">
                     <td class="text-center">
-                        <!-- TODO   :   On click, check the selected state
-                                        If 'selected/true' then deselect it and remove from the list of selected properties
-                                        If 'unselected/false' then select it and add to the list of selected properties
-                                        Updates will be done as an emit back to the parent -->
                         <input type="checkbox" class="width-auto" :aria-label="CustomMessages.SelectProperty"
-                               v-model="property.IsSelected">
+                               v-model="property.IsSelected" @click="$emit('UpdatePropertySelection', property.Id)">
                     </td>
                     <td class="text-center">{{property.Address}}</td>
                     <td class="text-center">{{property.Postcode}}</td>
@@ -78,6 +74,7 @@
                 return !this.IsProcessingSearch && this.Properties.length > 0;
             }
         },
+        emits: ["UpdatePropertySelection"],
         props: {
             Properties: {
                 required: true,

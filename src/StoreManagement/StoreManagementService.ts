@@ -1,5 +1,5 @@
 ﻿// Enums
-import { MutationTypes } from "../Enums/Stores/StoreTypes";
+import { MutationTypes } from "../Enums/StoreTypes";
 
 // Models
 import { InputState, InputPayload } from "../Models/Inputs/InputControlState";

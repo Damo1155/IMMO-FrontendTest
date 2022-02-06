@@ -18,13 +18,3 @@ export const BuildStringValidator = (request: StringValidatorProperties): String
             }
         });
 }
-
-export const BuildEmailStringValidator = (request: StringValidatorProperties): StringSchema<string, AnyObject> => {
-    return string()
-        .when((value: string) => {
-            if (request.IsRequired && !value) {
-                return string().required(`${request.FieldText} is a required field.`);
-            }
-        })
-        .email("Please provide a valid email address");
-}

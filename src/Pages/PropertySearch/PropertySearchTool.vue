@@ -67,7 +67,8 @@
                 CustomMessages: {
                     Search: "Search",
                     Address: "Address",
-                    PropertyTypes: "Property types"
+                    PropertyTypes: "Property types",
+                    PropertySearch: "Property search"
                 },
                 Identifiers: {
                     Address: "immo-address-search"
@@ -185,7 +186,9 @@
             }
         },
         mounted(): void {
-            this.RetrievePropertyTypes();
+            this.RetrievePropertyTypes();            
+            
+            document.title = this.CustomMessages.PropertySearch;
         },
         components: {
             InputText,

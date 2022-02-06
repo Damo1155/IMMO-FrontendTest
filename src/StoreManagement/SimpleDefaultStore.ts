@@ -2,7 +2,7 @@
 import { Store as VuexStore, createStore } from "vuex";
 
 // Enums
-import { ActionTypes, MutationTypes } from "../Enums/Stores/StoreTypes";
+import { ActionTypes, MutationTypes } from "../Enums/StoreTypes";
 
 // Models
 import { InputState, InputPayload } from "../Models/Inputs/InputControlState";

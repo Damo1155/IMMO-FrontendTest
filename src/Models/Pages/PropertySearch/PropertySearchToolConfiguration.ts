@@ -22,4 +22,5 @@ interface CustomMessages {
     Search: string;
     Address: string;
     PropertyTypes: string;
+    PropertySearch: string;
 }

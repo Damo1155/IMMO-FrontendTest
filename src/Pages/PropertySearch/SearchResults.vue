@@ -1,9 +1,7 @@
 ﻿<template>
     <h2 class="h5 mb-3">{{CustomMessages.SearchResults}}</h2>
     
-    <AlertError :HasErrorOccurred="HasErrorOccurred"></AlertError>
     <AlertInfo :Text="CustomMessages.HelpMessage" :HideAlert="!DisplayHelpMessage"></AlertInfo>
-    <AlertLoading :Text="CustomMessages.LoadingProperties" :IsProcessing="IsProcessingSearch"></AlertLoading>
     <AlertWarning :Text="CustomMessages.NoPropertiesFound" :HideAlert="!DisplayNoResultsFound"></AlertWarning>
     
     <template v-if="DisplaySearchResults">
@@ -48,16 +46,15 @@
 
     // Models
     import { MappedProperty } from "../../Models/PropertySearch/PropertiesConfiguration";
+    import { SearchResultsData } from "../../Models/PropertySearch/SearchResultsConfiguration";
 
     // Components
     import AlertInfo from "../../Components/Alerts/AlertInfo.vue";
-    import AlertError from "../../Components/Alerts/AlertError.vue";
-    import AlertLoading from "../../Components/Alerts/AlertLoading.vue";
     import AlertWarning from "../../Components/Alerts/AlertWarning.vue";
 
     export default defineComponent({
         name: "SearchResults",
-        data(): any {
+        data(): SearchResultsData {
             return {
                 CustomMessages:{
                     Address: "Address",
@@ -68,18 +65,17 @@
                     SelectProperty: "Select property",
                     ListOfProperties: "List of properties",
                     FloorArea: "Floor area (m<sup>2</sup>)",
-                    LoadingProperties: "Loading properties",
                     NoPropertiesFound: "No properties found",
                     HelpMessage: "Please provide an address before continuing"
                 }
-            };
+            } as SearchResultsData;
         },
         computed: {
             DisplaySearchResults(): boolean {
-                return !this.IsProcessingSearch && !this.HasErrorOccurred && !this.DisplayHelpMessage && this.Properties.length > 0;
+                return !this.IsProcessingSearch && !this.DisplayHelpMessage && this.Properties.length > 0;
             },
             DisplayNoResultsFound(): boolean {
-                return !this.IsProcessingSearch && !this.HasErrorOccurred && !this.DisplayHelpMessage && this.Properties.length === 0;
+                return !this.IsProcessingSearch && !this.DisplayHelpMessage && this.Properties.length === 0;
             }
         },
         emits: ["UpdatePropertySelection"],
@@ -92,10 +88,6 @@
                 type: Boolean,
                 required: true
             },
-            HasErrorOccurred: {
-                type: Boolean,
-                required: true
-            },
             IsProcessingSearch: {
                 type: Boolean,
                 required: true
@@ -103,9 +95,7 @@
         },
         components: {
             AlertInfo,
-            AlertError,
-            AlertWarning,
-            AlertLoading
+            AlertWarning
         }
     });
 </script>

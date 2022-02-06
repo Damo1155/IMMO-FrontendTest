@@ -1,5 +1,10 @@
 ﻿<template>
-    <SiteHeader></SiteHeader>
+    <div aria-live="polite" aria-atomic="false" class="position-fixed end-0">
+        <div id="immo-toast-container" class="toast-container p-3"
+                data-original-class="toast-container position-absolute p-3"></div>
+    </div>
+
+    <SiteHeader></SiteHeader>    
 
     <div class="container-fluid">
         <PropertySearchTool></PropertySearchTool>

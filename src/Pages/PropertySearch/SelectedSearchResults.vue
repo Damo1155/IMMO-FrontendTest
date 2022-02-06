@@ -30,10 +30,11 @@
 
     // Models
     import { MappedPropertyBase } from "../../Models/PropertySearch/PropertiesConfiguration";
+    import { SelectedSearchResultsData } from "../../Models/PropertySearch/SelectedSearchResultsConfiguration";
 
     export default defineComponent({
         name: "SelectedSearchResults",
-        data(): any {
+        data(): SelectedSearchResultsData {
             return {
                 CustomMessages: {
                     Address: "Address",
@@ -43,7 +44,7 @@
                     SelectedProperties: "Selected properties",
                     ListOfSelectedProperties: "List of selected properties"
                 }
-            };
+            } as SelectedSearchResultsData;
         },
         computed: {
             HasSelectedResults(): boolean {

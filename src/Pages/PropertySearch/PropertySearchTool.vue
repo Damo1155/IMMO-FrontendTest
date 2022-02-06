@@ -32,7 +32,7 @@
         </div>
         <div class="col-md-10">
             <SearchResults :Properties="Properties" :DisplayHelpMessage="DisplayHelpMessage" :IsProcessingSearch="IsProcessingSearch"
-                           :HasErrorOccurred="HasErrorOccurred" @UpdatePropertySelection="UpdatePropertySelection"></SearchResults>
+                           @UpdatePropertySelection="UpdatePropertySelection"></SearchResults>
         </div>
     </div>
 </template>
@@ -50,6 +50,7 @@
     // Services
     import { IsValid } from "../../Services/Validation/ValidationService";
     import { RetrieveValue } from "../../StoreManagement/StoreManagementService";
+    import { ToastProcessing, ToastValidationError, ToastError, ToastDestroy } from "../../Services/Bootstrap/ToastService";
 
     // Modules
     import SearchResults from "./SearchResults.vue";
@@ -66,14 +67,15 @@
                 Properties: [],
                 PropertyTypes: [],
                 SelectedProperties: [],
-                HasErrorOccurred: false,
                 DisplayHelpMessage: true,
                 IsProcessingSearch: false,
                 CustomMessages: {
                     Search: "Search",
                     Address: "Address",
                     PropertyTypes: "Property types",
-                    PropertySearch: "Property search"
+                    PropertySearch: "Property search",
+                    LoadingProperties: "Loading properties",
+                    AddressRequired: "Please ensure an address has been provided"
                 },
                 Identifiers: {
                     Address: "immo-address-search"
@@ -120,15 +122,17 @@
                 ] as Array<string>;
 
                 if (!IsValid(fieldsToValidate)) {
+                    ToastValidationError(this.CustomMessages.AddressRequired);
+
                     return;
                 }
 
                 this.Properties = [];
-                this.HasErrorOccurred = false;
                 this.IsProcessingSearch = true;
                 this.DisplayHelpMessage = false;
 
                 const address = RetrieveValue(this.Identifiers.Address) as string;
+                const toastIdentifier = ToastProcessing(this.CustomMessages.LoadingProperties);
                 
                 // Purpose  :   Some requests are being bubbled back up with an object rather than string.
                 const propertyType = (typeof(type) === "string" ? type : undefined) as string;
@@ -137,21 +141,23 @@
                     .then(({ properties }) => {
                         const ids = properties.map((property) => property.id);
 
-                        this.RetrievePropertyDetails(ids);
+                        this.RetrievePropertyDetails(ids, toastIdentifier);
                     })
                     .catch(() => {
-                        this.HasErrorOccurred = true;
                         this.IsProcessingSearch = false;
+                        
+                        ToastError();
+                        ToastDestroy(toastIdentifier);
                     });
             },
-            RetrievePropertyDetails(ids: Array<string>): void {                
+            RetrievePropertyDetails(ids: Array<string>, toastIdentifier: string): void {                
                 const promises = [] as Array<Promise<{ property: PropertyDetails }>>;
 
                 ids.forEach((id: string) => {
                     promises.push(fetchPropertyDetails(id));
                 });
 
-                const selectedProperties = (this.SelectedProperties as Array<MappedPropertyBase>)
+                const selectedProperties = (this.SelectedProperties as Array<MappedPropertyBase>);
 
                 // Note :   To combat significant UI lag the following is wrapped in a promise so they're
                 //          all resolved at the same point.
@@ -176,11 +182,11 @@
                         this.Properties = mappedProperties;
                     })
                     .catch(() => {
-                        this.HasErrorOccurred = true;
-                        this.IsProcessingSearch = false;
+                        ToastError();
                     })
                     .finally(() => {
                         this.IsProcessingSearch = false;
+                        ToastDestroy(toastIdentifier);
                     });
             },
             RetrievePropertyTypes(): void {

@@ -3,7 +3,6 @@ import { PropertyType } from "../../api";
 import { MappedPropertyBase, MappedProperty } from "./PropertiesConfiguration";
 
 export interface PropertySearchToolData {
-    HasErrorOccurred: boolean;
     DisplayHelpMessage: boolean;
     IsProcessingSearch: boolean;
     
@@ -24,4 +23,6 @@ interface CustomMessages {
     Address: string;
     PropertyTypes: string;
     PropertySearch: string;
+    AddressRequired: string;
+    LoadingProperties: string;
 }

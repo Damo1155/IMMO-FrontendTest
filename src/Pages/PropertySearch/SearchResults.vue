@@ -1,11 +1,11 @@
 ﻿<template>
+    <h2 class="h5 mb-3">{{CustomMessages.SearchResults}}</h2>
     <template v-if="DisplayHelpMessage">
         <AlertInfo :Text="CustomMessages.HelpMessage"></AlertInfo>
     </template>
     <template v-else-if="HasSearchResults">
-        <h2 class="h5 mb-3">{{CustomMessages.SearchResults}}</h2>
         <table class="table table-bordered table-hover mb-0">
-            <caption class="sr-only">{{CustomMessages.ListOfAddresses}}</caption>
+            <caption class="sr-only">{{CustomMessages.ListOfProperties}}</caption>
             <thead class="table-light">
                 <tr>
                     <th class="text-center">
@@ -26,8 +26,10 @@
                     <td class="text-center">
                         <!-- TODO   :   On click, check the selected state
                                         If 'selected/true' then deselect it and remove from the list of selected properties
-                                        If 'unselected/false' then select it and add to the list of selected properties -->
-                        <input type="checkbox" class="width-auto" :aria-label="CustomMessages.SelectProperty">
+                                        If 'unselected/false' then select it and add to the list of selected properties
+                                        Updates will be done as an emit back to the parent -->
+                        <input type="checkbox" class="width-auto" :aria-label="CustomMessages.SelectProperty"
+                               v-model="property.IsSelected">
                     </td>
                     <td class="text-center">{{property.Address}}</td>
                     <td class="text-center">{{property.Postcode}}</td>
@@ -65,7 +67,7 @@
                     SearchResults: "Search results",
                     NumberOfRooms: "Number of rooms",
                     SelectProperty: "Select property",
-                    ListOfAddresses: "List of addresses",
+                    ListOfProperties: "List of properties",
                     NoPropertiesFound: "No properties found",
                     HelpMessage: "Please provide an address before continuing"
                 }

@@ -26,27 +26,30 @@
             </ul>
         </div>
         <div class="col-md-10">
+            <SelectedSearchResults :SelectedProperties="SelectedProperties" :IsProcessingSearch="IsProcessingSearch"></SelectedSearchResults>
             <SearchResults :Properties="Properties" :DisplayHelpMessage="DisplayHelpMessage" :IsProcessingSearch="IsProcessingSearch"></SearchResults>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { defineComponent } from "vue";
+    import { defineComponent, toRaw } from "vue";
 
     // Api
-    import { fetchProperties, fetchPropertyDetails, getAvailablePropertyTypes, PropertyType } from "../../api";
+    import { fetchProperties, fetchPropertyDetails, getAvailablePropertyTypes, PropertyDetails, PropertyType } from "../../api";
 
     // Models
-    import { MappedProperty } from "../../Models/Pages/PropertySearch/PropertiesConfiguration";
     import { PropertySearchToolData } from "../../Models/Pages/PropertySearch/PropertySearchToolConfiguration";
+    import { MappedPropertyBase, MappedProperty } from "../../Models/Pages/PropertySearch/PropertiesConfiguration";
 
     // Services
+    import { DistinctBy } from "../../Services/Array/DuplicatesService";
     import { IsValid } from "../../Services/Validation/ValidationService";
     import { RetrieveValue } from "../../StoreManagement/StoreManagementService";
 
     // Modules
     import SearchResults from "./SearchResults.vue";
+    import SelectedSearchResults from "./SelectedSearchResults.vue";
 
     // Components
     import InputText from "../../Components/Inputs/InputText.vue";
@@ -58,6 +61,7 @@
             return {
                 Properties: [],
                 PropertyTypes: [],
+                SelectedProperties: [],
                 DisplayHelpMessage: true,
                 IsProcessingSearch: false,
                 CustomMessages: {
@@ -106,32 +110,36 @@
                         this.DisplayHelpMessage = false;
                     });
             },
-            // TODO :   Look at moving this into it's own custom service as a promise
             RetrievePropertyDetails(ids: Array<string>): void {
-                // Note :   In a real world scenario this would be less than ideal to make multiple round trips 
-                //          for any additional information which wasn't returned as part of call one.
-                ids.forEach((id: string) => {
-                    fetchPropertyDetails(id)
-                        .then(({ property }) => {
-                            const mappedProperty = {
-                                Id: property.id,
-                                IsSelected: false, // TODO  :   Compare against the 'SelectedProperties' array to see if it's selected
-                                Address: property.address,
-                                Postcode: property.postcode,
-                                FloorArea: property.floorArea,
-                                PropertyType: property.propertyType,
-                                NumberOfRooms: property.numberOfRooms
-                            } as MappedProperty;
+                // Note :   To combat UI lag, a race condition in 'ArePropertiesSelected' and the watch executing multiple times,
+                //          the following is wrapped in a promise which will resolve everything at the same point.
+                
+                const promises = [] as Array<Promise<{ property: PropertyDetails }>>;
 
-                            const currentProperties = this.Properties;
-                            this.Properties = [...currentProperties, mappedProperty];
-                        })
-                        .catch(() => {
-                            // TODO :   Display an error message as it's sending back randomly generated errors.
-                        })
-                        .finally(() => {
-                        });
+                ids.forEach((id: string) => {
+                    promises.push(fetchPropertyDetails(id));
                 });
+
+                Promise.all(promises)
+                    .then((response) => {
+                        const mappedProperties = 
+                            response.map(({ property }) => {
+                                return {
+                                    Id: property.id,
+                                    IsSelected: false, // TODO  :   Compare against the 'SelectedProperties' array to see if it's selected
+                                    Address: property.address,
+                                    Postcode: property.postcode,
+                                    FloorArea: property.floorArea,
+                                    PropertyType: property.propertyType,
+                                    NumberOfRooms: property.numberOfRooms
+                                } as MappedProperty;
+                            });
+
+                        this.Properties = mappedProperties;
+                    })
+                    .catch(() => {
+                        // TODO :   Display an error message as it's sending back randomly generated errors.
+                    })
             },
             RetrievePropertyTypes(): void {
                 getAvailablePropertyTypes()
@@ -145,13 +153,52 @@
                     });
             }
         },
+        computed: {
+            ArePropertiesSelected(): boolean {
+                return this.Properties.map((property: MappedProperty) => property.IsSelected);
+            }
+        },
+        watch:{
+            ArePropertiesSelected(): void {
+                // TODO :   Deselecting the 'Selected Properties' doesn't remove them from the list.
+                //          Might need to be done differently, look into emitting a callback.
+                //              This way the ID of the selected object can be sent back rather than relying on reactive objects.
+
+                const properties = this.Properties as Array<MappedProperty>;
+
+                // Important    :   Reactive property which needs to be unwrapped when assigning to 'updatedSelection',
+                //                  otherwise it'll be assigned as a proxy.
+                const selectedProperties = toRaw(this.SelectedProperties) as Array<MappedPropertyBase>;
+                
+                const newAdditions = properties
+                    .filter((property: MappedProperty) => property.IsSelected)
+                    .map((property: MappedProperty) => {
+                        return {
+                            Id: property.Id,
+                            Address: property.Address,
+                            Postcode: property.Postcode,
+                            FloorArea: property.FloorArea,
+                            NumberOfRooms: property.NumberOfRooms
+                        } as MappedPropertyBase;
+                    });
+
+                const updatedSelection = [] as Array<MappedPropertyBase>;
+                
+                updatedSelection.push(...selectedProperties);
+                updatedSelection.push(...newAdditions);
+
+                // Purpose  :   Due to the above it's possible duplicates could be added so those are removed.
+                this.SelectedProperties = DistinctBy("Id", updatedSelection);
+            }
+        },
         mounted(): void {
             this.RetrievePropertyTypes();
         },
         components: {
             InputText,
             SubmitAction,
-            SearchResults
+            SearchResults,
+            SelectedSearchResults
         }
     });
 </script>

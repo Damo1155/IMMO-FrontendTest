@@ -1,5 +1,5 @@
 ﻿// State Management
-import { store } from "../../StoreManagement/SimpleDefaultStore";
+import { store } from "../../Services/StoreManagement/SimpleDefaultStore";
 
 // Models
 import { InputState } from "../../Models/Inputs/InputControlState";
@@ -16,7 +16,7 @@ export const IsValid = (identifiers: Array<string>): boolean => {
     });
 
     return allValid;
-}
+};
 
 export const DefineInvalidFields = (identifiers: Array<string>): Array<string> => {
     const invalidFields = [] as Array<string>;
@@ -30,4 +30,4 @@ export const DefineInvalidFields = (identifiers: Array<string>): Array<string> =
     });
 
     return invalidFields;
-}
+};

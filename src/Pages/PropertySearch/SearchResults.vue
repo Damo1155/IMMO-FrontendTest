@@ -1,9 +1,9 @@
 ﻿<template>
     <h2 class="h5 mb-3">{{CustomMessages.SearchResults}}</h2>
-    
+
     <AlertInfo :Text="CustomMessages.HelpMessage" :HideAlert="!DisplayHelpMessage"></AlertInfo>
     <AlertWarning :Text="CustomMessages.NoPropertiesFound" :HideAlert="!DisplayNoResultsFound"></AlertWarning>
-    
+
     <template v-if="DisplaySearchResults">
         <div class="table-responsive-md immo-bg-light-grey min-h-19">
             <table class="table">
@@ -45,18 +45,18 @@
     import { defineComponent, PropType } from "vue";
 
     // Models
-    import { MappedProperty } from "../../Models/PropertySearch/PropertiesConfiguration";
-    import { SearchResultsData } from "../../Models/PropertySearch/SearchResultsConfiguration";
+    import { MappedProperty } from "Models/PropertySearch/PropertiesConfiguration";
+    import { SearchResultsData } from "Models/PropertySearch/SearchResultsConfiguration";
 
     // Components
-    import AlertInfo from "../../Components/Alerts/AlertInfo.vue";
-    import AlertWarning from "../../Components/Alerts/AlertWarning.vue";
+    import AlertInfo from "Components/Alerts/AlertInfo.vue";
+    import AlertWarning from "Components/Alerts/AlertWarning.vue";
 
     export default defineComponent({
         name: "SearchResults",
         data(): SearchResultsData {
             return {
-                CustomMessages:{
+                CustomMessages: {
                     Address: "Address",
                     Postcode: "Postcode",
                     PropertyType: "Property type",

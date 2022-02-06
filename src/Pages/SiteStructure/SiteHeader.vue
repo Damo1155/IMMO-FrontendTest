@@ -1,4 +1,4 @@
-﻿<template>    
+﻿<template>
     <header class="immo-nav-header">
         <div class="immo-nav-branding d-flex">
             <div class="immo-brand-logo">
@@ -17,7 +17,7 @@
     import { defineComponent } from "vue";
 
     // Models
-    import { SiteHeaderData } from "../../Models/SiteStructure/SiteHeaderConfiguration";
+    import { SiteHeaderData } from "Models/SiteStructure/SiteHeaderConfiguration";
 
     export default defineComponent({
         name: "SiteHeader",

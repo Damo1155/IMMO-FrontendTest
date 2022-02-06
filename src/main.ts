@@ -1,15 +1,15 @@
 // Styles
-import "./SCSS/site-layout.SCSS";
+import "SCSS/site-layout.scss";
 
 // Libraries
 import { createApp } from "vue";
 import "@fortawesome/fontawesome-free/js/all";
 
 // VueX Store
-import { UseStore } from "./StoreManagement/SimpleDefaultStore";
+import { UseStore } from "Services/StoreManagement/SimpleDefaultStore";
 
 // Modules
-import App from "./Pages/app.vue";
+import App from "Pages/app.vue";
 
 // Mount Module
 createApp(App)

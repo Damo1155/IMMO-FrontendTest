@@ -4,7 +4,7 @@
                 data-original-class="toast-container position-absolute p-3"></div>
     </div>
 
-    <SiteHeader></SiteHeader>    
+    <SiteHeader></SiteHeader>
 
     <div class="container-fluid">
         <PropertySearchTool></PropertySearchTool>
@@ -15,8 +15,8 @@
     import { defineComponent } from "vue";
 
     // Modules
-    import SiteHeader from "./SiteStructure/SiteHeader.vue";
-    import PropertySearchTool from "./PropertySearch/PropertySearchTool.vue";
+    import SiteHeader from "Pages/SiteStructure/SiteHeader.vue";
+    import PropertySearchTool from "Pages/PropertySearch/PropertySearchTool.vue";
 
     export default defineComponent({
         name: "App",

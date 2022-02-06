@@ -1,5 +1,6 @@
 const path = require("path");
 const { VueLoaderPlugin } = require("vue-loader");
+const ESLintPlugin = require("eslint-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const { HotModuleReplacementPlugin } = require("webpack");
@@ -13,12 +14,12 @@ module.exports = {
         path: path.resolve(__dirname, "dist")
     },
     devServer: {
-        contentBase: false,
         hot: true,
         port: 8080,
         open: true,
+        overlay: true,
         compress: true,
-        overlay: true
+        contentBase: false
     },
     watchOptions: {
         ignored: /node_modules/
@@ -38,12 +39,9 @@ module.exports = {
             {
                 test: /\.s[ac]ss$/i,
                 use: [
-                    // Creates `style` nodes from JS strings
                     "style-loader",
-                    // Translates CSS into CommonJS
                     "css-loader",
-                    // Compiles Sass to CSS
-                    "sass-loader",
+                    "sass-loader"
                 ],
             },
             {
@@ -72,10 +70,22 @@ module.exports = {
         }),
         new CleanWebpackPlugin(),
         new HotModuleReplacementPlugin(),
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new ESLintPlugin({
+            extensions: ["ts", "vue"]
+        })
     ],
     resolve: {
-        extensions: [".js", ".ts"]
+        extensions: [".js", ".ts"],
+        alias: {
+            "SCSS": path.resolve(__dirname, "./src/SCSS/"),
+            "Enums": path.resolve(__dirname, "./src/Enums/"),
+            "Pages": path.resolve(__dirname, "./src/Pages/"),
+            "Models": path.resolve(__dirname, "./src/Models/"),
+            "Services": path.resolve(__dirname, "./src/Services/"),
+            "Components": path.resolve(__dirname, "./src/Components/"),
+            "TestDependencies": path.resolve(__dirname, "./src/TestDependencies/")
+        }
     },
     optimization: {
         minimize: true,

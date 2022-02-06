@@ -4,13 +4,13 @@
         <div class="col-md-10">
             <form @submit.prevent="ProcessSearch" class="mb-3">
                 <h2 class="h5 mb-3">{{CustomMessages.Search}}</h2>
-                
+
                 <div class="immo-search-group">
                     <InputText :Text="CustomMessages.Address" :FieldIdentifier="Identifiers.Address" :IsRequired="true" :AsPlaceholder="true"></InputText>
                     <SubmitAction :Text="CustomMessages.Search" :IsProcessing="IsProcessingSearch"></SubmitAction>
                 </div>
             </form>
-            
+
             <SelectedSearchResults :SelectedProperties="SelectedProperties"></SelectedSearchResults>
         </div>
     </div>
@@ -41,24 +41,29 @@
     import { defineComponent } from "vue";
 
     // Api
-    import { fetchProperties, fetchPropertyDetails, getAvailablePropertyTypes, PropertyDetails, PropertyType } from "../../api";
+    import {
+        fetchProperties, fetchPropertyDetails, getAvailablePropertyTypes,
+        PropertyDetails, PropertyType
+    } from "TestDependencies/api";
 
     // Models
-    import { PropertySearchToolData } from "../../Models/PropertySearch/PropertySearchToolConfiguration";
-    import { MappedPropertyBase, MappedProperty } from "../../Models/PropertySearch/PropertiesConfiguration";
+    import { PropertySearchToolData } from "Models/PropertySearch/PropertySearchToolConfiguration";
+    import { MappedPropertyBase, MappedProperty } from "Models/PropertySearch/PropertiesConfiguration";
 
     // Services
-    import { IsValid } from "../../Services/Validation/ValidationService";
-    import { RetrieveValue } from "../../StoreManagement/StoreManagementService";
-    import { ToastProcessing, ToastValidationError, ToastError, ToastDestroy } from "../../Services/Bootstrap/ToastService";
+    import { IsValid } from "Services/Validation/ValidationService";
+    import { RetrieveValue } from "Services/StoreManagement/StoreManagementService";
+    import {
+        ToastProcessing, ToastValidationError, ToastError, ToastDestroy
+    } from "Services/Bootstrap/ToastService";
 
     // Modules
-    import SearchResults from "./SearchResults.vue";
-    import SelectedSearchResults from "./SelectedSearchResults.vue";
+    import SearchResults from "Pages/PropertySearch/SearchResults.vue";
+    import SelectedSearchResults from "Pages/PropertySearch/SelectedSearchResults.vue";
 
     // Components
-    import InputText from "../../Components/Inputs/InputText.vue";
-    import SubmitAction from "../../Components/Buttons/SubmitAction.vue";
+    import InputText from "Components/Inputs/InputText.vue";
+    import SubmitAction from "Components/Buttons/SubmitAction.vue";
 
     export default defineComponent({
         name: "PropertySearchTool",
@@ -87,36 +92,36 @@
                 return !this.IsProcessingSearch && this.Properties.length > 0;
             }
         },
-        methods:{
+        methods: {
             UpdatePropertySelection(id: string): void {
                 const properties = this.Properties as Array<MappedProperty>;
-                const property = properties.find((property: MappedProperty) => property.Id == id);
+                const propertyDetails = properties.find((property: MappedProperty) => property.Id === id);
 
-                if(property.IsSelected) {
+                if (propertyDetails.IsSelected) {
                     // Important    :   Cannot rely on 'index' with 'splice'/'$delete' due to dealing with 2 different objects.
                     const selectedProperties = (this.SelectedProperties as Array<MappedPropertyBase>);
                     const filteredProperties = selectedProperties.filter((selectedProperty: MappedPropertyBase) => selectedProperty.Id !== id);
-                    
+
                     this.SelectedProperties = filteredProperties;
-                    
+
                     return;
                 }
 
                 const newSelectedProperty = {
-                    Id: property.Id,
-                    Address: property.Address,
-                    Postcode: property.Postcode,
-                    FloorArea: property.FloorArea,
-                    NumberOfRooms: property.NumberOfRooms
+                    Id: propertyDetails.Id,
+                    Address: propertyDetails.Address,
+                    Postcode: propertyDetails.Postcode,
+                    FloorArea: propertyDetails.FloorArea,
+                    NumberOfRooms: propertyDetails.NumberOfRooms
                 } as MappedPropertyBase;
 
                 (this.SelectedProperties as Array<MappedPropertyBase>).push(newSelectedProperty);
             },
             ProcessSearch(type: string): void {
-                if(this.IsProcessingSearch) {
+                if (this.IsProcessingSearch) {
                     return;
                 }
-                
+
                 const fieldsToValidate = [
                     this.Identifiers.Address
                 ] as Array<string>;
@@ -133,9 +138,9 @@
 
                 const address = RetrieveValue(this.Identifiers.Address) as string;
                 const toastIdentifier = ToastProcessing(this.CustomMessages.LoadingProperties);
-                
+
                 // Purpose  :   Some requests are being bubbled back up with an object rather than string.
-                const propertyType = (typeof(type) === "string" ? type : undefined) as string;
+                const propertyType = (typeof type === "string" ? type : undefined) as string;
 
                 fetchProperties({ address, propertyType })
                     .then(({ properties }) => {
@@ -145,12 +150,12 @@
                     })
                     .catch(() => {
                         this.IsProcessingSearch = false;
-                        
+
                         ToastError();
                         ToastDestroy(toastIdentifier);
                     });
             },
-            RetrievePropertyDetails(ids: Array<string>, toastIdentifier: string): void {                
+            RetrievePropertyDetails(ids: Array<string>, toastIdentifier: string): void {
                 const promises = [] as Array<Promise<{ property: PropertyDetails }>>;
 
                 ids.forEach((id: string) => {
@@ -163,7 +168,7 @@
                 //          all resolved at the same point.
                 Promise.all(promises)
                     .then((response) => {
-                        const mappedProperties = 
+                        const mappedProperties =
                             response.map(({ property }) => {
                                 const isSelected = selectedProperties
                                     .some((selectedProperty: MappedPropertyBase) => selectedProperty.Id === property.id);
@@ -202,8 +207,8 @@
             }
         },
         mounted(): void {
-            this.RetrievePropertyTypes();            
-            
+            this.RetrievePropertyTypes();
+
             document.title = this.CustomMessages.PropertySearch;
         },
         components: {

@@ -15,5 +15,16 @@
       "DOM",
       "ES2021"
     ],
+    
+    "baseUrl": ".",
+    "paths": {
+      "SCSS/*": [ "src/SCSS/*" ],
+      "Enums/*": [ "src/Enums/*" ],
+      "Pages/*": [ "src/Pages/*" ],
+      "Models/*": [ "src/Models/*" ],
+      "Services/*": [ "src/Services/*" ],
+      "Components/*": [ "src/Components/*" ],
+      "TestDependencies/*": [ "src/TestDependencies/*" ]
+    }
   }
 }

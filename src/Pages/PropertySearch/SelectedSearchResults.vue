@@ -29,8 +29,8 @@
     import { defineComponent, PropType } from "vue";
 
     // Models
-    import { MappedPropertyBase } from "../../Models/PropertySearch/PropertiesConfiguration";
-    import { SelectedSearchResultsData } from "../../Models/PropertySearch/SelectedSearchResultsConfiguration";
+    import { MappedPropertyBase } from "Models/PropertySearch/PropertiesConfiguration";
+    import { SelectedSearchResultsData } from "Models/PropertySearch/SelectedSearchResultsConfiguration";
 
     export default defineComponent({
         name: "SelectedSearchResults",

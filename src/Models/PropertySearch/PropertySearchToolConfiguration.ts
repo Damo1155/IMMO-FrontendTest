@@ -1,5 +1,5 @@
 // Models
-import { PropertyType } from "../../api";
+import { PropertyType } from "../../TestDependencies/api";
 import { MappedPropertyBase, MappedProperty } from "./PropertiesConfiguration";
 
 export interface PropertySearchToolData {

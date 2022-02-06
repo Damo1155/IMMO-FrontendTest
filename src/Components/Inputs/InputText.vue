@@ -1,11 +1,11 @@
-﻿<template>      
+﻿<template>
     <template v-if="AsPlaceholder">
         <input type="text" class="form-control"
                v-model="Value" :id="FieldIdentifier" :aria-required="IsRequired" :readonly="IsReadonly" :maxlength="MaxLength"
                :placeholder="Text" :aria-label="Text" />
     </template>
-    <template v-else>  
-        <div class="form-group mb-1">      
+    <template v-else>
+        <div class="form-group mb-1">
             <label :for="FieldIdentifier" :class="{ 'immo-required': IsRequired }">{{Text}}</label>
             <input type="text" class="form-control"
                    v-model="Value" :id="FieldIdentifier" :aria-required="IsRequired" :readonly="IsReadonly" :maxlength="MaxLength" />
@@ -18,13 +18,13 @@
     import { defineComponent } from "vue";
 
     // Models
-    import { ValidatorErrorsResponse } from "../../Models/Validation/ValidatorSchema";
-    import { ControlsSetup, ControlsData } from "../../Models/Inputs/InputControlState";
-    import { StringValidatorProperties } from "../../Models/Validation/ValidatorConfiguration";
+    import { ValidatorErrorsResponse } from "Models/Validation/ValidatorSchema";
+    import { ControlsSetup, ControlsData } from "Models/Inputs/InputControlState";
+    import { StringValidatorProperties } from "Models/Validation/ValidatorConfiguration";
 
     // Services
-    import { BuildStringValidator } from "../../Services/Validation/StringService";
-    import { RetrieveValue, StoreValue } from "../../StoreManagement/StoreManagementService";
+    import BuildStringValidator from "Services/Validation/StringService";
+    import { RetrieveValue, StoreValue } from "Services/StoreManagement/StoreManagementService";
 
     export default defineComponent({
         name: "InputText",

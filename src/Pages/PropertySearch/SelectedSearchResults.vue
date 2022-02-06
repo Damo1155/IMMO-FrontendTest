@@ -8,7 +8,7 @@
                     <th class="text-center">{{CustomMessages.Address}}</th>
                     <th class="text-center">{{CustomMessages.Postcode}}</th>
                     <th class="text-center">{{CustomMessages.NumberOfRooms}}</th>
-                    <th class="text-center">{{CustomMessages.FloorArea}}</th>
+                    <th class="text-center" v-html="CustomMessages.FloorArea"></th>
                 </tr>
             </thead>
             <tbody>
@@ -36,8 +36,8 @@
                 CustomMessages: {
                     Address: "Address",
                     Postcode: "Postcode",
-                    FloorArea: "Floor area (m2)", // TODO   :   m2 needs to look like the designs
                     NumberOfRooms: "Number of rooms",
+                    FloorArea: "Floor area (m<sup>2</sup>)",
                     SelectedProperties: "Selected properties",
                     ListOfSelectedProperties: "List of selected properties"
                 }

@@ -1,5 +1,5 @@
 ﻿<template>
-    <button type="submit" class="btn btn-primary" :disabled="IsProcessing">
+    <button type="submit" class="immo-btn immo-btn-submit" :disabled="IsProcessing">
         <span v-if="IsProcessing">
             <i class="fas fa-spinner fa-spin"></i>
         </span>

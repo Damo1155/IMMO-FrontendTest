@@ -18,7 +18,7 @@
                     <th class="text-center">{{CustomMessages.Postcode}}</th>
                     <th class="text-center">{{CustomMessages.PropertyType}}</th>
                     <th class="text-center">{{CustomMessages.NumberOfRooms}}</th>
-                    <th class="text-center">{{CustomMessages.FloorArea}}</th>
+                    <th class="text-center" v-html="CustomMessages.FloorArea"></th>
                 </tr>
             </thead>
             <tbody>
@@ -58,12 +58,12 @@
                 CustomMessages:{
                     Address: "Address",
                     Postcode: "Postcode",
-                    FloorArea: "Floor area (m2)", // TODO   :   m2 needs to look like the designs
                     PropertyType: "Property type",
                     SearchResults: "Search results",
                     NumberOfRooms: "Number of rooms",
                     SelectProperty: "Select property",
                     ListOfProperties: "List of properties",
+                    FloorArea: "Floor area (m<sup>2</sup>)",
                     NoPropertiesFound: "No properties found",
                     HelpMessage: "Please provide an address before continuing"
                 }

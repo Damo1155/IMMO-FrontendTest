@@ -2,7 +2,7 @@
     <div :class="{ 'd-none': HideAlert, 'alert alert-info': !HideAlert }"
          aria-atomic="true" aria-live="assertive" role="alert" :aria-hidden="HideAlert">
         <span class="icon">
-            <i class="fas fa-exclamation-triangle"></i>
+            <i class="fas fa-info-circle"></i>
         </span>
         <div class="text" v-html="Text"></div>
     </div>

@@ -4,9 +4,8 @@
         <div class="col-md-10">
             <form @submit.prevent="ProcessSearch">
                 <h2 class="h5 mb-3">{{CustomMessages.Search}}</h2>
-
-                <!-- TODO   : Come back to this later and adjust so it falls inline with the designs -->
-                <div class="input-group mb-3">
+                
+                <div class="immo-search-group">
                     <InputText :Text="CustomMessages.Address" :FieldIdentifier="Identifiers.Address" :IsRequired="true" :AsPlaceholder="true"></InputText>
                     <SubmitAction :Text="CustomMessages.Search" :IsProcessing="IsProcessingSearch"></SubmitAction>
                 </div>
@@ -16,14 +15,18 @@
 
     <div class="row">
         <div class="col-md-2">
-            <h2 class="h5 mb-3">{{CustomMessages.PropertyTypes}}</h2>
-            <ul>
-                <template v-for="(propertyType, index) in PropertyTypes" :key="index">
-                    <li>
-                        <a href="#" @click="ProcessSearch(propertyType.value)">{{propertyType.label}}</a>
-                    </li>
-                </template>
-            </ul>
+            <template v-if="HasPropertyTypes">
+                <h2 class="h5 mb-3">{{CustomMessages.PropertyTypes}}</h2>
+                <div class="immo-property-types">
+                    <ul>
+                        <template v-for="(propertyType, index) in PropertyTypes" :key="index">
+                            <li>
+                                <a href="#" @click="ProcessSearch(propertyType.value)">{{propertyType.label}}</a>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
         </div>
         <div class="col-md-10">
             <SelectedSearchResults :SelectedProperties="SelectedProperties" :IsProcessingSearch="IsProcessingSearch"></SelectedSearchResults>
@@ -74,6 +77,11 @@
                     Address: "immo-address-search"
                 }
             } as PropertySearchToolData;
+        },
+        computed: {
+            HasPropertyTypes(): boolean {
+                return !this.IsProcessingSearch && this.Properties.length > 0;
+            }
         },
         methods:{
             UpdatePropertySelection(id: string): void {

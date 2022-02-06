@@ -5,9 +5,12 @@
 // General
 @import "./General/html.scss";
 @import "./General/text.scss";
+@import "./General/heights.scss";
+@import "./General/backgrounds.scss";
 
 // Custom
 @import "./Custom/Bootstrap/alerts.scss";
+@import "./Custom/Components/tables.scss";
 @import "./Custom/Components/buttons.scss";
 @import "./Custom/Components/input-groups.scss";
 

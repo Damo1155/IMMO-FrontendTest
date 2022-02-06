@@ -1,25 +1,27 @@
 ﻿<template>
     <template v-if="HasSelectedResults">
         <h2 class="h5 mb-3">{{CustomMessages.SelectedProperties}}</h2>
-        <table class="table table-bordered table-hover mb-0">
-            <caption class="sr-only">{{CustomMessages.ListOfSelectedProperties}}</caption>
-            <thead class="table-light">
-                <tr>
-                    <th class="text-center">{{CustomMessages.Address}}</th>
-                    <th class="text-center">{{CustomMessages.Postcode}}</th>
-                    <th class="text-center">{{CustomMessages.NumberOfRooms}}</th>
-                    <th class="text-center" v-html="CustomMessages.FloorArea"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="selectedProperty in SelectedProperties" :key="selectedProperty.Id">
-                    <td class="text-center">{{selectedProperty.Address}}</td>
-                    <td class="text-center">{{selectedProperty.Postcode}}</td>
-                    <td class="text-center">{{selectedProperty.NumberOfRooms}}</td>
-                    <td class="text-center">{{selectedProperty.FloorArea}}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive-md immo-bg-light-grey min-h-9">
+            <table class="table">
+                <caption class="sr-only">{{CustomMessages.ListOfSelectedProperties}}</caption>
+                <thead>
+                    <tr>
+                        <th class="text-center">{{CustomMessages.Address}}</th>
+                        <th class="text-center">{{CustomMessages.Postcode}}</th>
+                        <th class="text-center">{{CustomMessages.NumberOfRooms}}</th>
+                        <th class="text-center" v-html="CustomMessages.FloorArea"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="selectedProperty in SelectedProperties" :key="selectedProperty.Id">
+                        <td class="text-center">{{selectedProperty.Address}}</td>
+                        <td class="text-center">{{selectedProperty.Postcode}}</td>
+                        <td class="text-center">{{selectedProperty.NumberOfRooms}}</td>
+                        <td class="text-center">{{selectedProperty.FloorArea}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </template>
 </template>
 

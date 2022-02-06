@@ -1,3 +1,4 @@
+@import "../../Variables/colours.scss";
 @import "../../Variables/screen-resolutions.scss";
 
 .immo-btn {
@@ -12,8 +13,8 @@
     font-size: 1rem;
 
     &.immo-btn-submit {
-        background-color: #ffdb06;
-        border: 1px solid #d1b434;
+        border: 2.5px solid $immo-btn-submit-border;
+        background: linear-gradient($immo-btn-submit-primary, $immo-btn-submit-secondary);
     }
 }
 

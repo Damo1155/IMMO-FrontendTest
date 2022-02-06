@@ -4,37 +4,39 @@
         <AlertInfo :Text="CustomMessages.HelpMessage"></AlertInfo>
     </template>
     <template v-else-if="HasSearchResults">
-        <table class="table table-bordered table-hover mb-0">
-            <caption class="sr-only">{{CustomMessages.ListOfProperties}}</caption>
-            <thead class="table-light">
-                <tr>
-                    <th class="text-center">
-                        <i class="fas fa-check"></i>
-                        <span class="sr-only">
-                            {{CustomMessages.SelectProperty}}
-                        </span>
-                    </th>
-                    <th class="text-center">{{CustomMessages.Address}}</th>
-                    <th class="text-center">{{CustomMessages.Postcode}}</th>
-                    <th class="text-center">{{CustomMessages.PropertyType}}</th>
-                    <th class="text-center">{{CustomMessages.NumberOfRooms}}</th>
-                    <th class="text-center" v-html="CustomMessages.FloorArea"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="property in Properties" :key="property.Id">
-                    <td class="text-center">
-                        <input type="checkbox" class="width-auto" :aria-label="CustomMessages.SelectProperty"
-                               v-model="property.IsSelected" @click="$emit('UpdatePropertySelection', property.Id)">
-                    </td>
-                    <td class="text-center">{{property.Address}}</td>
-                    <td class="text-center">{{property.Postcode}}</td>
-                    <td class="text-center immo-sentence-case">{{property.PropertyType}}</td>
-                    <td class="text-center">{{property.NumberOfRooms}}</td>
-                    <td class="text-center">{{property.FloorArea}}</td>
-                </tr>
-            </tbody>
-        </table>        
+        <div class="table-responsive-md immo-bg-light-grey min-h-19">
+            <table class="table">
+                <caption class="sr-only">{{CustomMessages.ListOfProperties}}</caption>
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            <i class="fas fa-check"></i>
+                            <span class="sr-only">
+                                {{CustomMessages.SelectProperty}}
+                            </span>
+                        </th>
+                        <th class="text-center">{{CustomMessages.Address}}</th>
+                        <th class="text-center">{{CustomMessages.Postcode}}</th>
+                        <th class="text-center">{{CustomMessages.PropertyType}}</th>
+                        <th class="text-center">{{CustomMessages.NumberOfRooms}}</th>
+                        <th class="text-center" v-html="CustomMessages.FloorArea"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="property in Properties" :key="property.Id">
+                        <td class="text-center">
+                            <input type="checkbox" class="width-auto" :aria-label="CustomMessages.SelectProperty"
+                                v-model="property.IsSelected" @click="$emit('UpdatePropertySelection', property.Id)">
+                        </td>
+                        <td class="text-center">{{property.Address}}</td>
+                        <td class="text-center">{{property.Postcode}}</td>
+                        <td class="text-center immo-sentence-case">{{property.PropertyType}}</td>
+                        <td class="text-center">{{property.NumberOfRooms}}</td>
+                        <td class="text-center">{{property.FloorArea}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </template>
     <template v-else>
         <AlertWarning :Text="CustomMessages.NoPropertiesFound"></AlertWarning>        

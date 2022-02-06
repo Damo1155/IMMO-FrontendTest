@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-2" aria-hidden="true" role="presentation"></div>
         <div class="col-md-10">
-            <form @submit.prevent="ProcessSearch">
+            <form @submit.prevent="ProcessSearch" class="mb-3">
                 <h2 class="h5 mb-3">{{CustomMessages.Search}}</h2>
                 
                 <div class="immo-search-group">
@@ -10,10 +10,12 @@
                     <SubmitAction :Text="CustomMessages.Search" :IsProcessing="IsProcessingSearch"></SubmitAction>
                 </div>
             </form>
+            
+            <SelectedSearchResults :SelectedProperties="SelectedProperties" :IsProcessingSearch="IsProcessingSearch"></SelectedSearchResults>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row mt-3">
         <div class="col-md-2">
             <template v-if="HasPropertyTypes">
                 <h2 class="h5 mb-3">{{CustomMessages.PropertyTypes}}</h2>
@@ -29,7 +31,6 @@
             </template>
         </div>
         <div class="col-md-10">
-            <SelectedSearchResults :SelectedProperties="SelectedProperties" :IsProcessingSearch="IsProcessingSearch"></SelectedSearchResults>
             <SearchResults :Properties="Properties" :DisplayHelpMessage="DisplayHelpMessage" :IsProcessingSearch="IsProcessingSearch"
                            @UpdatePropertySelection="UpdatePropertySelection"></SearchResults>
         </div>
@@ -144,9 +145,10 @@
                         this.DisplayHelpMessage = false;
                     });
             },
+            // TODO :   If time, improve the 'Promise.all' so it can be fed to a service
             RetrievePropertyDetails(ids: Array<string>): void {
-                // Note :   To combat UI lag, a race condition in 'ArePropertiesSelected' and the watch executing multiple times,
-                //          the following is wrapped in a promise which will resolve everything at the same point.
+                // Note :   To combat significant UI lag the following is wrapped in a promise so they're
+                //          all resolved at the same point.
                 
                 const promises = [] as Array<Promise<{ property: PropertyDetails }>>;
 

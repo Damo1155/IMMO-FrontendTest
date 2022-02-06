@@ -11,7 +11,7 @@
                 </div>
             </form>
             
-            <SelectedSearchResults :SelectedProperties="SelectedProperties" :IsProcessingSearch="IsProcessingSearch"></SelectedSearchResults>
+            <SelectedSearchResults :SelectedProperties="SelectedProperties"></SelectedSearchResults>
         </div>
     </div>
 
@@ -32,7 +32,7 @@
         </div>
         <div class="col-md-10">
             <SearchResults :Properties="Properties" :DisplayHelpMessage="DisplayHelpMessage" :IsProcessingSearch="IsProcessingSearch"
-                           @UpdatePropertySelection="UpdatePropertySelection"></SearchResults>
+                           :HasErrorOccurred="HasErrorOccurred" @UpdatePropertySelection="UpdatePropertySelection"></SearchResults>
         </div>
     </div>
 </template>
@@ -44,8 +44,8 @@
     import { fetchProperties, fetchPropertyDetails, getAvailablePropertyTypes, PropertyDetails, PropertyType } from "../../api";
 
     // Models
-    import { PropertySearchToolData } from "../../Models/Pages/PropertySearch/PropertySearchToolConfiguration";
-    import { MappedPropertyBase, MappedProperty } from "../../Models/Pages/PropertySearch/PropertiesConfiguration";
+    import { PropertySearchToolData } from "../../Models/PropertySearch/PropertySearchToolConfiguration";
+    import { MappedPropertyBase, MappedProperty } from "../../Models/PropertySearch/PropertiesConfiguration";
 
     // Services
     import { IsValid } from "../../Services/Validation/ValidationService";
@@ -66,6 +66,7 @@
                 Properties: [],
                 PropertyTypes: [],
                 SelectedProperties: [],
+                HasErrorOccurred: false,
                 DisplayHelpMessage: true,
                 IsProcessingSearch: false,
                 CustomMessages: {
@@ -123,7 +124,9 @@
                 }
 
                 this.Properties = [];
+                this.HasErrorOccurred = false;
                 this.IsProcessingSearch = true;
+                this.DisplayHelpMessage = false;
 
                 const address = RetrieveValue(this.Identifiers.Address) as string;
                 
@@ -137,19 +140,11 @@
                         this.RetrievePropertyDetails(ids);
                     })
                     .catch(() => {
-                        console.error("'ProcessSearch' ERROR OCCURED");
-                        // TODO :   Display an error message as it's sending back randomly generated errors.
-                    })
-                    .finally(() => {
+                        this.HasErrorOccurred = true;
                         this.IsProcessingSearch = false;
-                        this.DisplayHelpMessage = false;
                     });
             },
-            // TODO :   If time, improve the 'Promise.all' so it can be fed to a service
-            RetrievePropertyDetails(ids: Array<string>): void {
-                // Note :   To combat significant UI lag the following is wrapped in a promise so they're
-                //          all resolved at the same point.
-                
+            RetrievePropertyDetails(ids: Array<string>): void {                
                 const promises = [] as Array<Promise<{ property: PropertyDetails }>>;
 
                 ids.forEach((id: string) => {
@@ -158,6 +153,8 @@
 
                 const selectedProperties = (this.SelectedProperties as Array<MappedPropertyBase>)
 
+                // Note :   To combat significant UI lag the following is wrapped in a promise so they're
+                //          all resolved at the same point.
                 Promise.all(promises)
                     .then((response) => {
                         const mappedProperties = 
@@ -179,9 +176,12 @@
                         this.Properties = mappedProperties;
                     })
                     .catch(() => {
-                        console.error("'RetrievePropertyDetails' ERROR OCCURED");
-                        // TODO :   Display an error message as it's sending back randomly generated errors.
+                        this.HasErrorOccurred = true;
+                        this.IsProcessingSearch = false;
                     })
+                    .finally(() => {
+                        this.IsProcessingSearch = false;
+                    });
             },
             RetrievePropertyTypes(): void {
                 getAvailablePropertyTypes()

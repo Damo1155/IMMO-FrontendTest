@@ -1,8 +1,9 @@
 // Models
-import { PropertyType } from "../../../api";
-import { MappedPropertyBase, MappedProperty } from "../../../Models/Pages/PropertySearch/PropertiesConfiguration";
+import { PropertyType } from "../../api";
+import { MappedPropertyBase, MappedProperty } from "./PropertiesConfiguration";
 
 export interface PropertySearchToolData {
+    HasErrorOccurred: boolean;
     DisplayHelpMessage: boolean;
     IsProcessingSearch: boolean;
     

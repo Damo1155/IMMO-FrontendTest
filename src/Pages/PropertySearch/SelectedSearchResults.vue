@@ -29,7 +29,7 @@
     import { defineComponent, PropType } from "vue";
 
     // Models
-    import { MappedPropertyBase } from "../../Models/Pages/PropertySearch/PropertiesConfiguration";
+    import { MappedPropertyBase } from "../../Models/PropertySearch/PropertiesConfiguration";
 
     export default defineComponent({
         name: "SelectedSearchResults",
@@ -47,17 +47,13 @@
         },
         computed: {
             HasSelectedResults(): boolean {
-                return !this.IsProcessingSearch && this.SelectedProperties.length > 0;
+                return this.SelectedProperties.length > 0;
             }
         },
         props: {
             SelectedProperties: {
                 required: true,
                 type: Array as PropType<Array<MappedPropertyBase>>
-            },
-            IsProcessingSearch: {
-                type: Boolean,
-                required: true
             }
         }
     });

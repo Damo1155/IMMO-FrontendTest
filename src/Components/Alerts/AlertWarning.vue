@@ -18,7 +18,7 @@
                 type: String,
                 required: false
             },
-            HideAlert:{
+            HideAlert: {
                 type: Boolean,
                 required: false
             }

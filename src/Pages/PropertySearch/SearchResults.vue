@@ -1,9 +1,12 @@
 ﻿<template>
     <h2 class="h5 mb-3">{{CustomMessages.SearchResults}}</h2>
-    <template v-if="DisplayHelpMessage">
-        <AlertInfo :Text="CustomMessages.HelpMessage"></AlertInfo>
-    </template>
-    <template v-else-if="HasSearchResults">
+    
+    <AlertError :HasErrorOccurred="HasErrorOccurred"></AlertError>
+    <AlertInfo :Text="CustomMessages.HelpMessage" :HideAlert="!DisplayHelpMessage"></AlertInfo>
+    <AlertLoading :Text="CustomMessages.LoadingProperties" :IsProcessing="IsProcessingSearch"></AlertLoading>
+    <AlertWarning :Text="CustomMessages.NoPropertiesFound" :HideAlert="!DisplayNoResultsFound"></AlertWarning>
+    
+    <template v-if="DisplaySearchResults">
         <div class="table-responsive-md immo-bg-light-grey min-h-19">
             <table class="table">
                 <caption class="sr-only">{{CustomMessages.ListOfProperties}}</caption>
@@ -38,19 +41,18 @@
             </table>
         </div>
     </template>
-    <template v-else>
-        <AlertWarning :Text="CustomMessages.NoPropertiesFound"></AlertWarning>        
-    </template>
 </template>
 
 <script lang="ts">
     import { defineComponent, PropType } from "vue";
 
     // Models
-    import { MappedProperty } from "../../Models/Pages/PropertySearch/PropertiesConfiguration";
+    import { MappedProperty } from "../../Models/PropertySearch/PropertiesConfiguration";
 
     // Components
     import AlertInfo from "../../Components/Alerts/AlertInfo.vue";
+    import AlertError from "../../Components/Alerts/AlertError.vue";
+    import AlertLoading from "../../Components/Alerts/AlertLoading.vue";
     import AlertWarning from "../../Components/Alerts/AlertWarning.vue";
 
     export default defineComponent({
@@ -66,14 +68,18 @@
                     SelectProperty: "Select property",
                     ListOfProperties: "List of properties",
                     FloorArea: "Floor area (m<sup>2</sup>)",
+                    LoadingProperties: "Loading properties",
                     NoPropertiesFound: "No properties found",
                     HelpMessage: "Please provide an address before continuing"
                 }
             };
         },
         computed: {
-            HasSearchResults(): boolean {
-                return !this.IsProcessingSearch && this.Properties.length > 0;
+            DisplaySearchResults(): boolean {
+                return !this.IsProcessingSearch && !this.HasErrorOccurred && !this.DisplayHelpMessage && this.Properties.length > 0;
+            },
+            DisplayNoResultsFound(): boolean {
+                return !this.IsProcessingSearch && !this.HasErrorOccurred && !this.DisplayHelpMessage && this.Properties.length === 0;
             }
         },
         emits: ["UpdatePropertySelection"],
@@ -86,6 +92,10 @@
                 type: Boolean,
                 required: true
             },
+            HasErrorOccurred: {
+                type: Boolean,
+                required: true
+            },
             IsProcessingSearch: {
                 type: Boolean,
                 required: true
@@ -93,7 +103,9 @@
         },
         components: {
             AlertInfo,
-            AlertWarning
+            AlertError,
+            AlertWarning,
+            AlertLoading
         }
     });
 </script>
